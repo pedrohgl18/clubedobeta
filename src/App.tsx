@@ -2,8 +2,11 @@ import { AuthWidget } from './AuthWidget';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { IconSparkles, IconRocket, IconShieldCheck } from '@tabler/icons-react';
 import { Dialog } from '@headlessui/react';
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+
+// Code splitting: carregar seções em chunks separados
+const Depoimentos = lazy(() => import('./sections/Depoimentos'));
+const FAQ = lazy(() => import('./sections/FAQ'));
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -59,12 +62,19 @@ function Hero() {
         <div className="absolute -bottom-10 -right-10 h-72 w-72 rounded-full bg-sky-200 opacity-60 blur-3xl" />
       </div>
       <div className="max-w-6xl mx-auto text-center px-5 py-16 md:py-24">
-        <motion.h1 initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.6}} className="text-4xl md:text-6xl font-extrabold text-slate-900">Clube dos Beta Testers</motion.h1>
-        <motion.p initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.6, delay:.1}} className="mt-4 text-lg md:text-xl text-slate-600">Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios!</motion.p>
-        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{delay:.2}} className="mt-6 flex items-center justify-center gap-3 flex-wrap">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900">Clube dos Beta Testers</h1>
+        <p className="mt-4 text-lg md:text-xl text-slate-600">Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios!</p>
+        <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
           <a className="inline-flex items-center justify-center px-5 py-3 rounded-full bg-indigo-600 text-white font-semibold hover:bg-indigo-700" href="#planos">Quero ser Beta Tester</a>
           <a className="inline-flex items-center justify-center px-5 py-3 rounded-full border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100" href="#empresas">Sou uma empresa</a>
-        </motion.div>
+        </div>
+        {/* Captura de e-mail (Netlify Forms) */}
+        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="mt-8 max-w-md mx-auto flex gap-2">
+          <input type="hidden" name="form-name" value="newsletter" />
+          <p className="hidden"><label>Não preencha: <input name="bot-field" /></label></p>
+          <input required name="email" type="email" placeholder="Seu e-mail" className="flex-1 rounded-full border border-slate-300 px-4 py-2" />
+          <button className="rounded-full bg-indigo-600 text-white px-5 py-2 font-semibold hover:bg-indigo-700" type="submit">Quero novidades</button>
+        </form>
       </div>
     </header>
   );
@@ -92,27 +102,27 @@ function SectionBeneficios() {
       <div className="max-w-6xl mx-auto px-5">
         <h2 className="text-2xl font-bold text-indigo-700 mb-6">Benefícios</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <motion.div whileHover={{y:-4}} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-transform hover:-translate-y-1">
             <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
               <IconSparkles size={20} />
             </div>
             <h3 className="font-semibold text-slate-900">Testes exclusivos</h3>
             <p className="text-slate-600">Acesso a lançamentos antes do público.</p>
-          </motion.div>
-          <motion.div whileHover={{y:-4}} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-transform hover:-translate-y-1">
             <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
               <IconShieldCheck size={20} />
             </div>
             <h3 className="font-semibold text-slate-900">Recompensas</h3>
             <p className="text-slate-600">Badges, sorteios e reconhecimento.</p>
-          </motion.div>
-          <motion.div whileHover={{y:-4}} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-transform hover:-translate-y-1">
             <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
               <IconRocket size={20} />
             </div>
             <h3 className="font-semibold text-slate-900">Impacto real</h3>
             <p className="text-slate-600">Ajude produtos a ficarem melhores com seu feedback.</p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
@@ -134,10 +144,21 @@ function SectionEmpresas() {
 }
 
 function SectionPlanos() {
+  const [periodo, setPeriodo] = useState<'mensal' | 'anual'>('mensal');
+  const preco = useMemo(() => ({ mensal: 19, anual: 190 }), []);
   return (
     <section id="planos" className="py-12 bg-white">
       <div className="max-w-6xl mx-auto px-5">
-        <h2 className="text-2xl font-bold text-indigo-700 mb-6">Planos</h2>
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <h2 className="text-2xl font-bold text-indigo-700">Planos</h2>
+          <div className="flex items-center gap-2 text-sm">
+            <span className={periodo==='mensal' ? 'font-semibold text-slate-900' : 'text-slate-500'}>Mensal</span>
+            <button onClick={() => setPeriodo(p => p==='mensal' ? 'anual' : 'mensal')} className="relative w-14 h-7 rounded-full bg-slate-200">
+              <span className={`absolute top-1 left-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${periodo==='anual' ? 'translate-x-7' : ''}`}></span>
+            </button>
+            <span className={periodo==='anual' ? 'font-semibold text-slate-900' : 'text-slate-500'}>Anual <em className="not-italic text-green-600">(economize ~2 meses)</em></span>
+          </div>
+        </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <h3 className="font-semibold text-slate-900">Gratuito</h3>
@@ -147,7 +168,9 @@ function SectionPlanos() {
           <div className="rounded-xl border-2 border-indigo-500 bg-indigo-50 p-4">
             <h3 className="font-semibold text-slate-900">Premium</h3>
             <p className="text-slate-700">Acesso antecipado, badges, sorteios e prioridade</p>
-            <strong className="block mt-2 text-slate-900">R$ 19/mês</strong>
+            <strong className="block mt-2 text-slate-900">R$ {periodo==='mensal' ? preco.mensal : preco.anual}/
+              {periodo==='mensal' ? 'mês' : 'ano'}
+            </strong>
           </div>
         </div>
       </div>
@@ -155,40 +178,18 @@ function SectionPlanos() {
   );
 }
 
-function SectionDepoimentos() {
-  return (
-    <section id="depoimentos" className="py-12">
-      <div className="max-w-6xl mx-auto px-5">
-        <h2 className="text-2xl font-bold text-indigo-700 mb-4">Depoimentos</h2>
-        <blockquote className="rounded-xl border border-slate-200 bg-white p-4 mb-3">“Participei de 3 testes e adorei ver meu feedback virar features.” — Ana</blockquote>
-        <blockquote className="rounded-xl border border-slate-200 bg-white p-4">“Recebemos insights valiosos antes do lançamento.” — Empresa X</blockquote>
-      </div>
-    </section>
-  );
-}
-
-function SectionFAQ() {
-  return (
-    <section id="faq" className="py-12">
-      <div className="max-w-6xl mx-auto px-5">
-        <h2 className="text-2xl font-bold text-indigo-700 mb-4">FAQ</h2>
-        <details className="rounded-lg border border-slate-200 bg-white p-4 mb-3">
-          <summary className="cursor-pointer">O que é o Clube dos Beta Testers?</summary>
-          <p className="text-slate-700 mt-2">Uma comunidade que conecta testers e empresas para validar produtos.</p>
-        </details>
-        <details className="rounded-lg border border-slate-200 bg-white p-4">
-          <summary className="cursor-pointer">Como viro Premium?</summary>
-          <p className="text-slate-700 mt-2">Em breve integraremos pagamentos. Por ora, acompanhe as novidades.</p>
-        </details>
-      </div>
-    </section>
-  );
-}
+// (seções Depoimentos e FAQ estão em ./sections e carregadas via lazy)
 
 function Footer() {
   return (
     <footer className="mt-12 py-6 text-center text-slate-500">
       <div className="max-w-6xl mx-auto px-5">
+        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="max-w-md mx-auto mb-4 flex gap-2">
+          <input type="hidden" name="form-name" value="newsletter" />
+          <p className="hidden"><label>Não preencha: <input name="bot-field" /></label></p>
+          <input required name="email" type="email" placeholder="Seu e-mail" className="flex-1 rounded-full border border-slate-300 px-4 py-2" />
+          <button className="rounded-full bg-indigo-600 text-white px-5 py-2 font-semibold hover:bg-indigo-700" type="submit">Assinar</button>
+        </form>
         <small>© {new Date().getFullYear()} Clube dos Beta Testers. Todos os direitos reservados.</small>
       </div>
     </footer>
@@ -198,17 +199,60 @@ function Footer() {
 function App() {
   return (
     <div className="min-h-screen bg-slate-100">
+      <AnnouncementBar />
       <Navbar />
       <Hero />
+      <Logos />
       <SectionComoFunciona />
-      <SectionBeneficios />
+      <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando...</div>}>
+        <SectionBeneficios />
+      </Suspense>
       <SectionEmpresas />
       <SectionPlanos />
-      <SectionDepoimentos />
-      <SectionFAQ />
+      <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando depoimentos...</div>}>
+        <Depoimentos />
+      </Suspense>
+      <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando FAQ...</div>}>
+        <FAQ />
+      </Suspense>
       <Footer />
     </div>
   );
 }
 
 export default App;
+
+// Componentes adicionais
+function AnnouncementBar() {
+  const [open, setOpen] = useState(true);
+  useEffect(() => {
+    const dismissed = localStorage.getItem('announce.dismiss');
+    if (dismissed === '1') setOpen(false);
+  }, []);
+  const close = () => { setOpen(false); localStorage.setItem('announce.dismiss','1'); };
+  if (!open) return null;
+  return (
+    <div className="w-full bg-indigo-600 text-white text-sm">
+      <div className="max-w-6xl mx-auto px-5 py-2 flex items-center justify-between">
+        <span>Novidade: Lançamento do Premium com desconto de estreia.</span>
+        <button onClick={close} className="opacity-80 hover:opacity-100">Fechar</button>
+      </div>
+    </div>
+  );
+}
+
+function Logos() {
+  const marcas = ['Acme', 'Globex', 'Umbrella', 'Initech', 'Hooli', 'Soylent'];
+  return (
+    <section className="py-8">
+      <div className="max-w-6xl mx-auto px-5">
+        <p className="text-center text-slate-500 mb-4">Marcas que confiam</p>
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 items-center opacity-80">
+          {marcas.map((m) => (
+            <div key={m} className="text-center text-slate-400 font-semibold border border-slate-200 rounded-lg py-3 bg-white">{m}</div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

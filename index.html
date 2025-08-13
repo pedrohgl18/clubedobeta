@@ -4,9 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Clube dos Beta Testers — Teste, influencie e ganhe</title>
+    <meta name="description" content="Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios no Clube dos Beta Testers." />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Clube dos Beta Testers" />
+    <meta property="og:title" content="Clube dos Beta Testers — Teste, influencie e ganhe" />
+    <meta property="og:description" content="Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Clube dos Beta Testers" />
+    <meta name="twitter:description" content="Participe de testes exclusivos e ganhe benefícios." />
+    <meta name="twitter:image" content="/og-image.png" />
   </head>
   <body>
+    <!-- Netlify form shadow for detection -->
+    <form name="newsletter" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="email" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
