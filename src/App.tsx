@@ -1,12 +1,11 @@
 import { AuthWidget } from './AuthWidget';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { IconSparkles, IconRocket, IconShieldCheck } from '@tabler/icons-react';
+import { Bars3Icon, XMarkIcon, CheckCircleIcon, MinusIcon, CursorArrowRaysIcon, ClipboardDocumentListIcon, ChatBubbleLeftRightIcon, SparklesIcon as HeroSparklesIcon } from '@heroicons/react/24/outline';
+import { IconSparkles, IconRocket, IconShieldCheck, IconTrophy } from '@tabler/icons-react';
 import { Dialog } from '@headlessui/react';
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 
 // Code splitting: carregar seções em chunks separados
-const Depoimentos = lazy(() => import('./sections/Depoimentos'));
 const FAQ = lazy(() => import('./sections/FAQ'));
 
 function Navbar() {
@@ -78,6 +77,7 @@ function Hero() {
         <div className="absolute -bottom-24 left-1/4 h-[420px] w-[420px] rounded-full bg-sky-300/20 blur-3xl" />
       </div>
       <div className="max-w-6xl mx-auto text-center px-5 py-16 md:py-24">
+        <span className="inline-flex items-center gap-2 text-sm px-3 py-1 rounded-full bg-white/70 backdrop-blur border border-white/60 text-indigo-700">Comunidade de testers <HeroSparklesIcon className="w-4 h-4" /></span>
         <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">Clube dos Beta Testers</h1>
         <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios reais — com acesso antecipado, badges e recompensas.</p>
         <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
@@ -99,16 +99,28 @@ function Hero() {
 }
 
 function SectionComoFunciona() {
+  const steps = [
+    { title: 'Crie sua conta', desc: 'Leva menos de 1 minuto.', icon: CursorArrowRaysIcon },
+    { title: 'Participe de testes', desc: 'Escolha produtos que te interessam.', icon: ClipboardDocumentListIcon },
+    { title: 'Envie feedback', desc: 'Conte sua experiência com clareza.', icon: ChatBubbleLeftRightIcon },
+    { title: 'Ganhe benefícios', desc: 'Badges, sorteios e acesso antecipado.', icon: HeroSparklesIcon },
+  ];
   return (
     <section id="como-funciona" className="py-12">
       <div className="max-w-6xl mx-auto px-5">
-        <h2 className="text-2xl font-bold text-indigo-700 mb-4">Como funciona</h2>
-        <ol className="list-decimal ml-5 space-y-2 text-slate-700">
-          <li>Cadastre-se gratuitamente ou faça login.</li>
-          <li>Escolha testes de produtos e participe.</li>
-          <li>Envie feedbacks e ganhe recompensas.</li>
-          <li>Premium: acesso antecipado e benefícios exclusivos.</li>
-        </ol>
+        <h2 className="text-2xl font-bold text-indigo-700 mb-6">Como funciona</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {steps.map((s, i) => (
+            <div key={s.title} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700 font-bold">{i+1}</span>
+                <s.icon className="w-5 h-5 text-indigo-700" />
+              </div>
+              <h3 className="font-semibold text-slate-900">{s.title}</h3>
+              <p className="text-slate-600">{s.desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -119,7 +131,7 @@ function SectionBeneficios() {
     <section id="beneficios" className="py-12 bg-white">
       <div className="max-w-6xl mx-auto px-5">
         <h2 className="text-2xl font-bold text-indigo-700 mb-6">Benefícios</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-transform hover:-translate-y-1">
             <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
               <IconSparkles size={20} />
@@ -140,6 +152,13 @@ function SectionBeneficios() {
             </div>
             <h3 className="font-semibold text-slate-900">Impacto real</h3>
             <p className="text-slate-600">Ajude produtos a ficarem melhores com seu feedback.</p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-transform hover:-translate-y-1">
+            <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
+              <IconTrophy size={20} />
+            </div>
+            <h3 className="font-semibold text-slate-900">Desafios mensais</h3>
+            <p className="text-slate-600">Participe de desafios e evolua suas habilidades.</p>
           </div>
         </div>
       </div>
@@ -196,6 +215,31 @@ function SectionPlanos() {
             </strong>
           </div>
         </div>
+        <div className="mt-6 overflow-x-auto">
+          <table className="w-full text-sm border-separate border-spacing-y-2">
+            <thead>
+              <tr className="text-left text-slate-500">
+                <th className="px-3">Benefício</th>
+                <th className="px-3">Gratuito</th>
+                <th className="px-3">Premium</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Acesso a testes públicos', true, true],
+                ['Acesso antecipado', false, true],
+                ['Badges e sorteios', false, true],
+                ['Prioridade em convites', false, true],
+              ].map(([label, free, pro]) => (
+                <tr key={label as string} className="bg-white">
+                  <td className="px-3 py-2 text-slate-700">{label as string}</td>
+                  <td className="px-3 py-2">{free ? <CheckCircleIcon className="w-5 h-5 text-green-600" /> : <MinusIcon className="w-5 h-5 text-slate-400" />}</td>
+                  <td className="px-3 py-2">{pro ? <CheckCircleIcon className="w-5 h-5 text-green-600" /> : <MinusIcon className="w-5 h-5 text-slate-400" />}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );
@@ -247,11 +291,9 @@ function App() {
       <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando...</div>}>
         <SectionBeneficios />
       </Suspense>
+  <Compromissos />
       <SectionEmpresas />
       <SectionPlanos />
-      <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando depoimentos...</div>}>
-        <Depoimentos />
-      </Suspense>
       <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando FAQ...</div>}>
         <FAQ />
       </Suspense>
@@ -318,6 +360,32 @@ function ParceriasCTA() {
             {ok && <p className="text-green-700">Obrigado! Vamos entrar em contato por e-mail.</p>}
             {err && <p className="text-red-700">Não foi possível enviar. Tente novamente.</p>}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Compromissos() {
+  const items = [
+    { title: 'Feedback honesto', desc: 'Valorizamos experiências reais e opiniões sinceras.', icon: IconShieldCheck },
+    { title: 'Privacidade e respeito', desc: 'Seus dados e tempo são tratados com cuidado.', icon: IconShieldCheck },
+    { title: 'Transparência', desc: 'Clareza sobre objetivos e o uso dos feedbacks.', icon: IconShieldCheck },
+  ];
+  return (
+    <section className="py-12">
+      <div className="max-w-6xl mx-auto px-5">
+        <h2 className="text-2xl font-bold text-indigo-700 mb-6">Nossos compromissos</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((it) => (
+            <div key={it.title} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700">
+                <it.icon size={20} />
+              </div>
+              <h3 className="font-semibold text-slate-900">{it.title}</h3>
+              <p className="text-slate-600">{it.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
