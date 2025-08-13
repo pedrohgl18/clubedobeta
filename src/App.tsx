@@ -3,6 +3,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { IconSparkles, IconRocket, IconShieldCheck } from '@tabler/icons-react';
 import { Dialog } from '@headlessui/react';
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { Link } from 'react-router-dom';
 
 // Code splitting: carregar seções em chunks separados
 const Depoimentos = lazy(() => import('./sections/Depoimentos'));
@@ -17,7 +18,7 @@ function Navbar() {
         <div className="hidden md:flex gap-4 text-gray-700">
           <a className="hover:text-indigo-700" href="#como-funciona">Como funciona</a>
           <a className="hover:text-indigo-700" href="#beneficios">Benefícios</a>
-          <a className="hover:text-indigo-700" href="#empresas">Para empresas</a>
+          <Link className="hover:text-indigo-700" to="/empresas">Para empresas</Link>
           <a className="hover:text-indigo-700" href="#planos">Planos</a>
           <a className="hover:text-indigo-700" href="#faq">FAQ</a>
         </div>
@@ -41,7 +42,7 @@ function Navbar() {
           <nav className="flex flex-col gap-3 text-slate-700">
             <a onClick={() => setOpen(false)} href="#como-funciona">Como funciona</a>
             <a onClick={() => setOpen(false)} href="#beneficios">Benefícios</a>
-            <a onClick={() => setOpen(false)} href="#empresas">Para empresas</a>
+            <Link onClick={() => setOpen(false)} to="/empresas">Para empresas</Link>
             <a onClick={() => setOpen(false)} href="#planos">Planos</a>
             <a onClick={() => setOpen(false)} href="#faq">FAQ</a>
           </nav>
