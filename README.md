@@ -61,6 +61,22 @@ Fluxo no app:
 - Google: redireciona para `/.netlify/identity/authorize?provider=google`.
 - E-mail: usa `netlifyIdentity.open('login'|'signup')` do widget para os fluxos nativos.
 
+### Fluxo pós-registro
+
+- Cadastro com Google:
+	- Google retorna autenticado imediatamente (e-mail já verificado).
+	- O app captura o evento de `login` e redireciona:
+		- Se `user_metadata.onboarded` não estiver setado: `/onboarding`.
+		- Se já estiver setado: `/perfil`.
+- Cadastro com e-mail/senha:
+	- Após criar a conta (evento `signup`), o app fecha o modal e leva a `/verifique-email`.
+	- O usuário confirma pelo link recebido; ao retornar, o Identity dispara `login` e o app envia para `/onboarding` (ou `/perfil` se já tiver `onboarded`).
+- Onboarding (`/onboarding`):
+	- Coleta `displayName`, `interests` e `notify` e salva via `user.update({ data: { ... , onboarded: true } })`.
+	- Ao salvar, redireciona para `/perfil`.
+- Perfil (`/perfil`):
+	- Permite editar `displayName`, `interests` e `notify` a qualquer momento (persiste em `user_metadata`).
+
 ## Deploy no Netlify
 
 1. Add new site → Import from Git → selecione o repositório `clubedobeta`.
