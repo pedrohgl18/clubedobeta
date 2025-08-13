@@ -56,23 +56,23 @@ function Navbar() {
 
 function Hero() {
   return (
-    <header className="relative overflow-hidden bg-gradient-to-b from-indigo-50 to-white">
-      <div className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_center,white,transparent_60%)]">
-        <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-indigo-200 opacity-60 blur-3xl" />
-        <div className="absolute -bottom-10 -right-10 h-72 w-72 rounded-full bg-sky-200 opacity-60 blur-3xl" />
+    <header className="relative overflow-hidden bg-[radial-gradient(1200px_500px_at_50%_-40%,rgba(99,102,241,0.25),transparent),linear-gradient(to_bottom,#eef2ff,white)]">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-[560px] w-[560px] rounded-full bg-indigo-300/20 blur-3xl" />
+        <div className="absolute -bottom-24 left-1/4 h-[420px] w-[420px] rounded-full bg-sky-300/20 blur-3xl" />
       </div>
       <div className="max-w-6xl mx-auto text-center px-5 py-16 md:py-24">
-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900">Clube dos Beta Testers</h1>
-        <p className="mt-4 text-lg md:text-xl text-slate-600">Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios!</p>
+        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">Clube dos Beta Testers</h1>
+        <p className="mt-4 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">Participe de testes exclusivos, ajude a melhorar produtos e ganhe benefícios reais — com acesso antecipado, badges e recompensas.</p>
         <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
           <a className="inline-flex items-center justify-center px-5 py-3 rounded-full bg-indigo-600 text-white font-semibold hover:bg-indigo-700" href="#planos">Quero ser Beta Tester</a>
           <a className="inline-flex items-center justify-center px-5 py-3 rounded-full border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100" href="#empresas">Sou uma empresa</a>
         </div>
         {/* Captura de e-mail (Netlify Forms) */}
-        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="mt-8 max-w-md mx-auto flex gap-2">
+        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="mt-8 max-w-lg mx-auto flex gap-2 bg-white/70 backdrop-blur px-2 py-2 rounded-full shadow-sm border border-white/60">
           <input type="hidden" name="form-name" value="newsletter" />
           <p className="hidden"><label>Não preencha: <input name="bot-field" /></label></p>
-          <input required name="email" type="email" placeholder="Seu e-mail" className="flex-1 rounded-full border border-slate-300 px-4 py-2" />
+          <input required name="email" type="email" placeholder="Seu e-mail corporativo" className="flex-1 rounded-full border-0 bg-transparent px-4 py-2 outline-none text-slate-800 placeholder:text-slate-400" />
           <button className="rounded-full bg-indigo-600 text-white px-5 py-2 font-semibold hover:bg-indigo-700" type="submit">Quero novidades</button>
         </form>
       </div>
@@ -137,7 +137,7 @@ function SectionEmpresas() {
           <h2 className="text-2xl font-bold text-indigo-700 mb-2">Para empresas</h2>
           <p className="text-slate-700">Cadastre seu produto e receba feedbacks qualificados de uma comunidade engajada de beta testers.</p>
         </div>
-  <div aria-hidden className="rounded-2xl h-56 bg-gradient-to-br from-indigo-50 to-blue-100 shadow-inner" />
+  <div aria-hidden className="rounded-2xl h-56 bg-[radial-gradient(600px_200px_at_50%_-40%,rgba(99,102,241,0.2),transparent),linear-gradient(to_bottom_right,#eef2ff,#e0f2fe)] shadow-inner border border-white" />
       </div>
     </section>
   );
@@ -202,7 +202,7 @@ function App() {
       <AnnouncementBar />
       <Navbar />
       <Hero />
-      <Logos />
+  <ChamadaPiloto />
       <SectionComoFunciona />
       <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando...</div>}>
         <SectionBeneficios />
@@ -241,16 +241,24 @@ function AnnouncementBar() {
   );
 }
 
-function Logos() {
-  const marcas = ['Acme', 'Globex', 'Umbrella', 'Initech', 'Hooli', 'Soylent'];
+function ChamadaPiloto() {
   return (
-    <section className="py-8">
+    <section className="py-12">
       <div className="max-w-6xl mx-auto px-5">
-        <p className="text-center text-slate-500 mb-4">Marcas que confiam</p>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-4 items-center opacity-80">
-          {marcas.map((m) => (
-            <div key={m} className="text-center text-slate-400 font-semibold border border-slate-200 rounded-lg py-3 bg-white">{m}</div>
-          ))}
+        <div className="rounded-2xl border border-indigo-200/60 bg-[linear-gradient(180deg,rgba(238,242,255,0.9),white)] p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-slate-900">Buscamos as primeiras empresas parceiras</h2>
+            <p className="text-slate-700 mt-2">Se você quer validar um produto com beta testers qualificados, deixe seu contato. Vamos selecionar poucos projetos para um piloto com atenção dedicada.</p>
+          </div>
+          <form name="parcerias" method="POST" data-netlify="true" netlify-honeypot="campo-extra" className="w-full md:w-auto grid md:grid-cols-[1fr_auto] gap-2 bg-white/80 backdrop-blur rounded-xl p-2 border border-white">
+            <input type="hidden" name="form-name" value="parcerias" />
+            <p className="hidden"><label>Não preencher: <input name="campo-extra" /></label></p>
+            <input required name="empresa" placeholder="Nome da empresa" className="rounded-lg border border-slate-300 px-3 py-2" />
+            <input required type="email" name="email" placeholder="E-mail de contato" className="rounded-lg border border-slate-300 px-3 py-2" />
+            <input name="site" placeholder="Site (opcional)" className="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2" />
+            <textarea name="objetivos" placeholder="Objetivos do piloto (breve)" className="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2" rows={2} />
+            <button type="submit" className="md:col-span-2 rounded-lg bg-indigo-600 text-white px-4 py-2 font-semibold hover:bg-indigo-700">Quero participar do piloto</button>
+          </form>
         </div>
       </div>
     </section>
