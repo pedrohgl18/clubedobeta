@@ -49,6 +49,12 @@ Como configurar no Netlify:
 3) Identity → Registration → escolha “Open” (ou “Invite only” se preferir).
 4) Garanta que o domínio do site (Site settings → Domain management) é o mesmo usado no fluxo (o OAuth depende disso).
 
+Erros comuns:
+
+- `{"code":400,"msg":"Unsupported provider: Provider is not enabled"}`
+	- Solução: em Identity → Services, habilite o provedor Google. Aguarde alguns segundos e tente novamente no domínio do site publicado.
+	- Em ambiente local, o OAuth pode falhar. Teste no deploy do Netlify (preview ou produção).
+
 Fluxo no app:
 
 - Botão “Entrar” abre um modal com: Google, Entrar com e-mail, Criar conta.

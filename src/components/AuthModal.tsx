@@ -4,9 +4,22 @@ import netlifyIdentity from 'netlify-identity-widget';
 type Props = { open: boolean; onClose: () => void };
 
 export default function AuthModal({ open, onClose }: Props) {
-  const goGoogle = () => {
-    // Redireciona para OAuth do Netlify Identity (Google) — requer habilitar o provedor no Netlify
-    window.location.href = '/.netlify/identity/authorize?provider=google';
+  const goGoogle = async () => {
+    // Verifica se o provedor Google está habilitado antes de redirecionar
+    try {
+      const res = await fetch('/.netlify/identity/settings');
+      if (res.ok) {
+        const cfg = await res.json();
+        const enabled = cfg?.external?.providers?.includes?.('google') || cfg?.external?.google?.enabled === true;
+        if (enabled) {
+          window.location.href = '/.netlify/identity/authorize?provider=google';
+          return;
+        }
+      }
+    } catch {}
+    // Fallback: abre login padrão se Google não estiver habilitado
+    netlifyIdentity.open('login');
+    onClose();
   };
   const goLogin = () => {
     netlifyIdentity.open('login');

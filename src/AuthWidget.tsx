@@ -1,5 +1,6 @@
 import netlifyIdentity from 'netlify-identity-widget';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthModal from './components/AuthModal';
 
 type IdentityUser = { email?: string } | null;
@@ -7,12 +8,20 @@ type IdentityUser = { email?: string } | null;
 export function AuthWidget() {
   const [user, setUser] = useState<IdentityUser>(null);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     netlifyIdentity.init();
     netlifyIdentity.on('login', (u: any) => {
       setUser(u);
       netlifyIdentity.close();
+      const onboarded = u?.user_metadata?.onboarded === true;
+      navigate(onboarded ? '/perfil' : '/onboarding');
+    });
+    netlifyIdentity.on('signup', () => {
+      // Após cadastro com e-mail/senha o usuário precisa confirmar o e-mail.
+      netlifyIdentity.close();
+      navigate('/verifique-email');
     });
     netlifyIdentity.on('logout', () => {
       setUser(null);
@@ -20,6 +29,7 @@ export function AuthWidget() {
     setUser(netlifyIdentity.currentUser());
     return () => {
       netlifyIdentity.off('login');
+      netlifyIdentity.off('signup');
       netlifyIdentity.off('logout');
     };
   }, []);
