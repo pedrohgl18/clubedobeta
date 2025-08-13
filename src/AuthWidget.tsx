@@ -15,7 +15,13 @@ export function AuthWidget() {
     netlifyIdentity.on('login', (u: any) => {
       setUser(u);
       netlifyIdentity.close();
-      const onboarded = u?.user_metadata?.onboarded === true;
+      const meta = u?.user_metadata || {};
+      const accepted = Boolean(meta.acceptedPolicyVersion);
+      if (!accepted) {
+        navigate('/politica', { state: { from: '/onboarding' } } as any);
+        return;
+      }
+      const onboarded = meta.onboarded === true;
       navigate(onboarded ? '/perfil' : '/onboarding');
     });
     netlifyIdentity.on('signup', () => {

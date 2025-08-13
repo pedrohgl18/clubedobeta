@@ -7,6 +7,7 @@ import EmpresasPage from './pages/Empresas.tsx'
 import OnboardingPage from './pages/Onboarding.tsx'
 import PerfilPage from './pages/Perfil.tsx'
 import VerifyEmailPage from './pages/VerifyEmail.tsx'
+import PoliticaPage from './pages/Politica.tsx'
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   { path: '/onboarding', element: <OnboardingPage /> },
   { path: '/perfil', element: <PerfilPage /> },
   { path: '/verifique-email', element: <VerifyEmailPage /> },
+  { path: '/politica', element: <PoliticaPage /> },
 ])
 
 createRoot(document.getElementById('root')!).render(

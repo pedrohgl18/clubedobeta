@@ -77,6 +77,12 @@ Fluxo no app:
 - Perfil (`/perfil`):
 	- Permite editar `displayName`, `interests` e `notify` a qualquer momento (persiste em `user_metadata`).
 
+Etapa de aceite (Política + NDA):
+
+- Antes do onboarding, se `acceptedPolicyVersion` não estiver presente em `user_metadata`, o app redireciona para `/politica`.
+- Em `/politica`, o usuário lê a Política de Privacidade e o Acordo de Confidencialidade (NDA) e clica em “Aceitar e continuar”.
+- O aceite grava `acceptedPolicyVersion` e `acceptedPolicyAt` no `user_metadata` e retorna ao fluxo (por padrão para `/onboarding`).
+
 ## Deploy no Netlify
 
 1. Add new site → Import from Git → selecione o repositório `clubedobeta`.
