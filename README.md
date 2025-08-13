@@ -32,6 +32,12 @@ npm run build
 npm run preview
 ```
 
+## Tailwind CSS
+
+- Configurações: `tailwind.config.js` e `postcss.config.js`.
+- Entrypoint: `src/index.css` com `@tailwind base; @tailwind components; @tailwind utilities;`.
+- Estilos antigos de `src/App.css` foram removidos; a homepage usa classes utilitárias no JSX.
+
 ## Autenticação (Netlify Identity)
 
 - O login/logout é feito via Netlify Identity com o widget embutido.
@@ -46,8 +52,8 @@ npm run preview
 ## Tech stack
 
 - React + Vite + TypeScript
+- Tailwind CSS (utilitários) + PostCSS/Autoprefixer
 - Netlify Identity (auth) e Netlify (deploy)
-- CSS simples em `src/App.css` (pronto para migrar para Tailwind no futuro)
 
 ## Próximos passos sugeridos
 
