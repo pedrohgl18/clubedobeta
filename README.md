@@ -1,69 +1,57 @@
-# React + TypeScript + Vite
+# Clube dos Beta Testers
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Portal em React + Vite com autenticação via Netlify Identity e deploy no Netlify. Conecta testers e empresas para validar produtos, com plano gratuito e premium.
 
-Currently, two official plugins are available:
+## Homepage — Estrutura e Seções
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A página inicial foi construída com foco em conversão e clareza. Ela contém:
 
-## Expanding the ESLint configuration
+- Navbar: logo, âncoras (Como funciona, Benefícios, Planos, FAQ) e login/logout (Netlify Identity).
+- Hero: título, subtítulo e CTA “Quero ser Beta Tester” + CTA para empresas.
+- Como funciona: passo a passo simples (cadastro → escolha testes → envie feedback → receba benefícios).
+- Benefícios/Valor: cartões com vantagens para testers e empresas.
+- Para empresas: bloco dedicado explicando como cadastrar testes e receber feedbacks.
+- Planos: Free vs Premium (acesso antecipado, badges, sorteios, prioridade).
+- Depoimentos: feedbacks reais (mock) para prova social.
+- FAQ: respostas rápidas às dúvidas comuns.
+- Footer: direitos, contatos e links úteis.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+IDs das seções para navegação por âncora: `#como-funciona`, `#beneficios`, `#empresas`, `#planos`, `#depoimentos`, `#faq`.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Como rodar localmente
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```powershell
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Build e preview
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```powershell
+npm run build
+npm run preview
 ```
+
+## Autenticação (Netlify Identity)
+
+- O login/logout é feito via Netlify Identity com o widget embutido.
+- Após publicar no Netlify, ative “Identity” no painel do site.
+
+## Deploy no Netlify
+
+1. Add new site → Import from Git → selecione o repositório `clubedobeta`.
+2. Build command: `npm run build` | Publish directory: `dist`.
+3. Após o primeiro deploy, ative “Identity”.
+
+## Tech stack
+
+- React + Vite + TypeScript
+- Netlify Identity (auth) e Netlify (deploy)
+- CSS simples em `src/App.css` (pronto para migrar para Tailwind no futuro)
+
+## Próximos passos sugeridos
+
+- Dashboard do usuário e listagem de testes.
+- Formulário de envio de feedback.
+- Cadastro de testes (empresas) com workflow de aprovação.
+- Integração de pagamentos para Premium (Stripe/PayPal/MercadoPago).
