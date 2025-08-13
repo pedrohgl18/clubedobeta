@@ -55,6 +55,21 @@ function Navbar() {
 }
 
 function Hero() {
+  const [ok, setOk] = useState(false);
+  const [err, setErr] = useState(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOk(false); setErr(false);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const params = new URLSearchParams();
+    data.forEach((v, k) => { if (typeof v === 'string') params.append(k, v); });
+    try {
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() });
+      setOk(true);
+      (form as HTMLFormElement).reset();
+    } catch { setErr(true); }
+  };
   return (
     <header className="relative overflow-hidden bg-[radial-gradient(1200px_500px_at_50%_-40%,rgba(99,102,241,0.25),transparent),linear-gradient(to_bottom,#eef2ff,white)]">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -69,12 +84,14 @@ function Hero() {
           <a className="inline-flex items-center justify-center px-5 py-3 rounded-full border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100" href="#empresas">Sou uma empresa</a>
         </div>
         {/* Captura de e-mail (Netlify Forms) */}
-        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="mt-8 max-w-lg mx-auto flex gap-2 bg-white/70 backdrop-blur px-2 py-2 rounded-full shadow-sm border border-white/60">
+  <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={onSubmit} className="mt-8 max-w-lg mx-auto flex gap-2 bg-white/70 backdrop-blur px-2 py-2 rounded-full shadow-sm border border-white/60">
           <input type="hidden" name="form-name" value="newsletter" />
           <p className="hidden"><label>Não preencha: <input name="bot-field" /></label></p>
           <input required name="email" type="email" placeholder="Seu e-mail corporativo" className="flex-1 rounded-full border-0 bg-transparent px-4 py-2 outline-none text-slate-800 placeholder:text-slate-400" />
           <button className="rounded-full bg-indigo-600 text-white px-5 py-2 font-semibold hover:bg-indigo-700" type="submit">Quero novidades</button>
         </form>
+  {ok && <p className="mt-3 text-green-700">Tudo certo! Você entrou na lista.</p>}
+  {err && <p className="mt-3 text-red-700">Algo deu errado. Tente novamente.</p>}
       </div>
     </header>
   );
@@ -136,6 +153,11 @@ function SectionEmpresas() {
         <div>
           <h2 className="text-2xl font-bold text-indigo-700 mb-2">Para empresas</h2>
           <p className="text-slate-700">Cadastre seu produto e receba feedbacks qualificados de uma comunidade engajada de beta testers.</p>
+          <ul className="mt-4 space-y-2 text-slate-700 list-disc pl-5">
+            <li>Testers qualificados e motivados.</li>
+            <li>Feedback acionável priorizado por impacto.</li>
+            <li>Triagem e moderação para manter a qualidade.</li>
+          </ul>
         </div>
   <div aria-hidden className="rounded-2xl h-56 bg-[radial-gradient(600px_200px_at_50%_-40%,rgba(99,102,241,0.2),transparent),linear-gradient(to_bottom_right,#eef2ff,#e0f2fe)] shadow-inner border border-white" />
       </div>
@@ -181,15 +203,32 @@ function SectionPlanos() {
 // (seções Depoimentos e FAQ estão em ./sections e carregadas via lazy)
 
 function Footer() {
+  const [ok, setOk] = useState(false);
+  const [err, setErr] = useState(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOk(false); setErr(false);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const params = new URLSearchParams();
+    data.forEach((v, k) => { if (typeof v === 'string') params.append(k, v); });
+    try {
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() });
+      setOk(true);
+      (form as HTMLFormElement).reset();
+    } catch { setErr(true); }
+  };
   return (
     <footer className="mt-12 py-6 text-center text-slate-500">
       <div className="max-w-6xl mx-auto px-5">
-        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" className="max-w-md mx-auto mb-4 flex gap-2">
+        <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={onSubmit} className="max-w-md mx-auto mb-4 flex gap-2">
           <input type="hidden" name="form-name" value="newsletter" />
           <p className="hidden"><label>Não preencha: <input name="bot-field" /></label></p>
           <input required name="email" type="email" placeholder="Seu e-mail" className="flex-1 rounded-full border border-slate-300 px-4 py-2" />
           <button className="rounded-full bg-indigo-600 text-white px-5 py-2 font-semibold hover:bg-indigo-700" type="submit">Assinar</button>
         </form>
+        {ok && <p className="text-green-600 mb-2">Obrigado! Você receberá novidades em breve.</p>}
+        {err && <p className="text-red-600 mb-2">Não foi possível enviar. Tente novamente.</p>}
         <small>© {new Date().getFullYear()} Clube dos Beta Testers. Todos os direitos reservados.</small>
       </div>
     </footer>
@@ -202,7 +241,7 @@ function App() {
       <AnnouncementBar />
       <Navbar />
       <Hero />
-  <ChamadaPiloto />
+  <ParceriasCTA />
       <SectionComoFunciona />
       <Suspense fallback={<div className="text-center py-12 text-slate-500">Carregando...</div>}>
         <SectionBeneficios />
@@ -241,24 +280,43 @@ function AnnouncementBar() {
   );
 }
 
-function ChamadaPiloto() {
+function ParceriasCTA() {
+  const [ok, setOk] = useState(false);
+  const [err, setErr] = useState(false);
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setOk(false); setErr(false);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const params = new URLSearchParams();
+    data.forEach((v, k) => { if (typeof v === 'string') params.append(k, v); });
+    try {
+      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() });
+      setOk(true);
+      (form as HTMLFormElement).reset();
+    } catch { setErr(true); }
+  };
   return (
     <section className="py-12">
       <div className="max-w-6xl mx-auto px-5">
         <div className="rounded-2xl border border-indigo-200/60 bg-[linear-gradient(180deg,rgba(238,242,255,0.9),white)] p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6">
           <div className="flex-1">
-            <h2 className="text-2xl font-bold text-slate-900">Buscamos as primeiras empresas parceiras</h2>
-            <p className="text-slate-700 mt-2">Se você quer validar um produto com beta testers qualificados, deixe seu contato. Vamos selecionar poucos projetos para um piloto com atenção dedicada.</p>
+            <h2 className="text-2xl font-bold text-slate-900">Traga seu produto para testes reais</h2>
+            <p className="text-slate-700 mt-2">Conecte-se com beta testers qualificados e receba feedbacks acionáveis para evoluir seu produto com segurança.</p>
           </div>
-          <form name="parcerias" method="POST" data-netlify="true" netlify-honeypot="campo-extra" className="w-full md:w-auto grid md:grid-cols-[1fr_auto] gap-2 bg-white/80 backdrop-blur rounded-xl p-2 border border-white">
+          <form name="parcerias" method="POST" data-netlify="true" netlify-honeypot="campo-extra" onSubmit={onSubmit} className="w-full md:w-auto grid md:grid-cols-[1fr_auto] gap-2 bg-white/80 backdrop-blur rounded-xl p-2 border border-white">
             <input type="hidden" name="form-name" value="parcerias" />
             <p className="hidden"><label>Não preencher: <input name="campo-extra" /></label></p>
             <input required name="empresa" placeholder="Nome da empresa" className="rounded-lg border border-slate-300 px-3 py-2" />
             <input required type="email" name="email" placeholder="E-mail de contato" className="rounded-lg border border-slate-300 px-3 py-2" />
             <input name="site" placeholder="Site (opcional)" className="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2" />
-            <textarea name="objetivos" placeholder="Objetivos do piloto (breve)" className="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2" rows={2} />
-            <button type="submit" className="md:col-span-2 rounded-lg bg-indigo-600 text-white px-4 py-2 font-semibold hover:bg-indigo-700">Quero participar do piloto</button>
+            <textarea name="objetivos" placeholder="Objetivos (breve)" className="rounded-lg border border-slate-300 px-3 py-2 md:col-span-2" rows={2} />
+            <button type="submit" className="md:col-span-2 rounded-lg bg-indigo-600 text-white px-4 py-2 font-semibold hover:bg-indigo-700">Fale com a gente</button>
           </form>
+          <div className="md:w-48">
+            {ok && <p className="text-green-700">Obrigado! Vamos entrar em contato por e-mail.</p>}
+            {err && <p className="text-red-700">Não foi possível enviar. Tente novamente.</p>}
+          </div>
         </div>
       </div>
     </section>
